@@ -1,4 +1,4 @@
-# https://www.codewars.com/kata/546d15cebed2e10334000ed9
+"""Solution for kata https://www.codewars.com/kata/546d15cebed2e10334000ed9."""
 import re
 
 

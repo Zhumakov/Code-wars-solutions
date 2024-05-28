@@ -1,3 +1,4 @@
+"""Solution for kata https://www.codewars.com/kata/5868a68ba44cfc763e00008d."""
 COMMAND = ('n', 'e', 's', 'w', '*', '[', ']')
 
 
