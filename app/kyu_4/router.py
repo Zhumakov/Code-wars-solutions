@@ -3,8 +3,13 @@ import re
 from fastapi import APIRouter, Query, HTTPException, status
 
 from solutions.kyu_4 import (
-    binary_with_unknown_bits, custom_paintfuck_interpreter, decode_the_morse_code,
-    explosive_summ, find_the_unknown_digit
+    binary_with_unknown_bits,
+    custom_paintfuck_interpreter,
+    decode_the_morse_code,
+    explosive_summ,
+    find_the_unknown_digit,
+    hamming_numbers,
+    knapsack_problem
 )
 
 router = APIRouter(prefix='/kyu_4', tags=['4 kyu kata'])
@@ -131,4 +136,51 @@ async def solve_runes(
                             detail='Числа в выражении должны быть меньше 1_000_000')
 
     solution_res = find_the_unknown_digit.solve_runes(runes)
+    return solution_res
+
+
+@router.post(
+    '/hamming',
+    summary='humming numbers',
+    description='Ссылка на задачу https://www.codewars.com/kata/526d84b98f428f14a60008da'
+)
+async def hamming(
+        n: int = Query(
+            None,
+            description='Целое число в диапазоне от 1 до 5000'
+        )
+) -> int:
+    if not (0 < n < 5000):
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                            detail='Число должно быть в диапазоне от 1 до 5000')
+
+    solution_res = hamming_numbers.hamming(n)
+    return solution_res
+
+
+@router.post(
+    '/knapsack',
+    summary='knapsack problem',
+    description='Ссылка на задачу https://www.codewars.com/kata/5c2256acb26767ff56000047'
+)
+async def knapsack(
+        items: list[list[int]] = Query(
+            None,
+            description='Список предметов, представленный в формате [вес, стоимость],'
+                        'количество предметов должно быть в диапазоне от 1 до 200'
+        ),
+        w_limit: int = Query(
+            None,
+            description='Число, представляющее максимальную вместимость рюкзака,'
+                        'должно быть в диапазоне от 1 до 80'
+        )
+) -> list[int, list[list[int]]]:
+    if not (0 < len(items) < 200):
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                            detail='Количество предметов должно быть в диапазоне от 1 до 200')
+    if not (0 < w_limit < 80):
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                            detail='Максимальный вес рюкзака должен быть в диапазоне от 1 до 80')
+
+    solution_res = knapsack_problem.knapsack(items, w_limit)
     return solution_res
