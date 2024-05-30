@@ -1,4 +1,4 @@
-# https://www.codewars.com/kata/54b72c16cd7f5154e9000457
+"""Solution for kata https://www.codewars.com/kata/54b72c16cd7f5154e9000457"""
 CODE = {'A': '.-',     'B': '-...',   'C': '-.-.',
         'D': '-..',    'E': '.',      'F': '..-.',
         'G': '--.',    'H': '....',   'I': '..',
