@@ -9,7 +9,8 @@ from solutions.kyu_4 import (
     explosive_summ,
     find_the_unknown_digit,
     hamming_numbers,
-    knapsack_problem
+    knapsack_problem,
+    matrix_determinant
 )
 
 router = APIRouter(prefix='/kyu_4', tags=['4 kyu kata'])
@@ -183,4 +184,30 @@ async def knapsack(
                             detail='Максимальный вес рюкзака должен быть в диапазоне от 1 до 80')
 
     solution_res = knapsack_problem.knapsack(items, w_limit)
+    return solution_res
+
+
+@router.post(
+    '/determinant',
+    summary='matrix determinant',
+    description='Ссылка на задачу https://www.codewars.com/kata/52a382ee44408cea2500074c'
+)
+async def determinant(
+    matrix: list[list[int]] = Query(
+        None,
+        description='Матрица NxN, состоящая из целых чисел, максимальная размерность - 8x8'
+    )
+) -> int:
+    num_rows = len(matrix)
+
+    for row in matrix:
+        if len(row) != num_rows:
+            raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                                detail='Все строки и столбцы должны быть одинаковой длины')
+
+    if len(matrix) > 8 or len(matrix[0]) > 8:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                            detail='Максимальная размерность - 8x8')
+
+    solution_res = matrix_determinant.determinant(matrix)
     return solution_res

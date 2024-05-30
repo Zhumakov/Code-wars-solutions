@@ -1,4 +1,6 @@
-# https://www.codewars.com/kata/52a382ee44408cea2500074c
+"""Solution for kata https://www.codewars.com/kata/52a382ee44408cea2500074c"""
+
+
 def reduce_matrix(array, i_column):
     res = []
     size = len(array)
