@@ -1,6 +1,6 @@
 import re
 
-from fastapi import APIRouter, Query, HTTPException, status
+from fastapi import APIRouter, HTTPException, Query, status
 
 from solutions.kyu_4 import (
     binary_with_unknown_bits,
@@ -10,7 +10,8 @@ from solutions.kyu_4 import (
     find_the_unknown_digit,
     hamming_numbers,
     knapsack_problem,
-    matrix_determinant
+    matrix_determinant,
+    most_frequently_used,
 )
 
 router = APIRouter(prefix='/kyu_4', tags=['4 kyu kata'])
@@ -210,4 +211,23 @@ async def determinant(
                             detail='Максимальная размерность - 8x8')
 
     solution_res = matrix_determinant.determinant(matrix)
+    return solution_res
+
+
+@router.post(
+    '/top_3_words',
+    summary='most frequently used',
+    description='Ссылка на задачу https://www.codewars.com/kata/51e056fe544cf36c410000fb'
+)
+async def top_3_words(
+        text: str = Query(
+            None,
+            description='Текст, ограничение: 1000 символов'
+        )
+) -> list[str]:
+    if len(text) >= 1000:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                            detail='Текст должен иметь длину менее 1000 символов')
+
+    solution_res = most_frequently_used.top_3_words(text)
     return solution_res

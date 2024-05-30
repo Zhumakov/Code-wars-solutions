@@ -1,4 +1,4 @@
-# https://www.codewars.com/kata/51e056fe544cf36c410000fb
+"""Solution for kata https://www.codewars.com/kata/51e056fe544cf36c410000fb"""
 import re
 from collections import Counter
 
