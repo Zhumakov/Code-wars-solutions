@@ -1,4 +1,6 @@
-# https://www.codewars.com/kata/55983863da40caa2c900004e
+"""Solution for kata https://www.codewars.com/kata/55983863da40caa2c900004e."""
+
+
 def find_nearest_bigger(n):
     num_str = list(str(n))
     for i in range(-1, -len(num_str) - 1, -1):

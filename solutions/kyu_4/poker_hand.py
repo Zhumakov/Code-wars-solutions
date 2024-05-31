@@ -1,9 +1,9 @@
-# https://www.codewars.com/kata/5739174624fc28e188000465/python
+"""Solution for kata https://www.codewars.com/kata/5739174624fc28e188000465."""
 import collections
 
 
 class PokerHand(object):
-    RESULT = ["Loss", "Tie", "Win"]
+    RESULT = ['Loss', 'Tie', 'Win']
 
     COST_COMB = {'Royal Flush': 10, 'Straight Flush': 9, 'Four of a Kind': 8, 'Full Hause': 7, 'Flush': 6,
                  'Straight': 5, 'Three of a Kind': 4, 'Two Pair': 3, 'Pair': 2, 'High card': 1}
@@ -121,3 +121,8 @@ class PokerHand(object):
                     continue
 
             return self.RESULT[1]
+
+
+def run_kata(hand, other):
+    player, opponent = PokerHand(hand), PokerHand(other)
+    return player.compare_with(opponent)
