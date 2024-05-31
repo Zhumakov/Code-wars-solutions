@@ -123,6 +123,6 @@ class PokerHand(object):
             return self.RESULT[1]
 
 
-def run_kata(hand, other):
-    player, opponent = PokerHand(hand), PokerHand(other)
+def run_kata(player_hand, opponent_hand):
+    player, opponent = PokerHand(player_hand), PokerHand(opponent_hand)
     return player.compare_with(opponent)

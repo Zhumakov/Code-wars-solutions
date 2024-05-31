@@ -12,7 +12,9 @@ from solutions.kyu_4 import (
     knapsack_problem,
     matrix_determinant,
     most_frequently_used,
-    next_bigger_number
+    next_bigger_number,
+    poker_hand,
+    recover_a_secret_string_from_random_triplets
 )
 
 router = APIRouter(prefix='/kyu_4', tags=['4 kyu kata'])
@@ -219,7 +221,46 @@ async def next_bigger(
     description='Ссылка на задачу https://www.codewars.com/kata/5739174624fc28e188000465'
 )
 async def poker_hand(
-        player_hand: str,
-        other_hand: str
+        player_hand: str = Query(
+            ...,
+            regex='^([0-9TJQKA][SHDC] ?){5}$',
+            description='Строка, представляющая собой руку игрока, например: 2H 3H 4H 5H 6H'
+        ),
+        opponent_hand: str = Query(
+            ...,
+            regex='^([0-9TJQKA][SHDC] ?){5}$',
+            description='Строка, представляющая собой руку оппонента, например: KS AS TS QS JS'
+        )
 ) -> Literal['Loss', 'Tie', 'Win']:
-    pass
+    solution_res = poker_hand.run_kata(player_hand, opponent_hand)
+    return solution_res
+
+
+@router.post(
+    '/recover_secret',
+    summary='recover a secret string from random triplets',
+    description='Ссылка на задачу https://www.codewars.com/kata/53f40dff5f9d31b813000774'
+)
+async def recover_secret(
+        triplets: list[list[str]] = Query(
+            default=[
+                ['t', 'u', 'p'],
+                ['w', 'h', 'i'],
+                ['t', 's', 'u'],
+                ['a', 't', 's'],
+                ['h', 'a', 'p'],
+                ['t', 'i', 's'],
+                ['w', 'h', 's']
+            ],
+            min_length=1,
+            max_length=500,
+            description='Тройки символов, из которых можно составить строку, '
+                        'в примере получается строка whatisup'
+        )
+) -> str:
+    try:
+        solution_res = recover_a_secret_string_from_random_triplets.recover_secret(triplets)
+    except TimeoutError:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                            detail='Данные тройки символов не имеют решения')
+    return solution_res

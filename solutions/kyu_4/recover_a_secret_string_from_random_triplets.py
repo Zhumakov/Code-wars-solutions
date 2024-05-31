@@ -1,8 +1,20 @@
-# https://www.codewars.com/kata/53f40dff5f9d31b813000774
+"""Solution for kata https://www.codewars.com/kata/53f40dff5f9d31b813000774"""
+
+from time import perf_counter
+
+
+TIMEOUT = 1
+
+
 def recover_secret(triplets):
-    all_letters = set([x for y in triplets for x in y])
+    all_letters = set([letter for triplet in triplets for letter in triplet])
     res = ''
+    start = perf_counter()
     while all_letters:
+        end = perf_counter()
+        if end - start > TIMEOUT:
+            raise TimeoutError
+
         for letter in all_letters:
             buffer = []
             for triplet in triplets:
@@ -13,7 +25,7 @@ def recover_secret(triplets):
             if all(map(lambda x: x[0] == letter, buffer)):
                 res += letter
                 all_letters.remove(letter)
-                for x in buffer:
-                    x.pop(0)
+                for triplet in buffer:
+                    triplet.pop(0)
                 break
     return res
