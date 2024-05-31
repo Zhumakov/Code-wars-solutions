@@ -4,17 +4,21 @@ from typing import Literal
 from fastapi import APIRouter, HTTPException, Query, status
 
 from solutions.kyu_4 import (
-    custom_paintfuck_interpreter,
-    decode_the_morse_code,
-    explosive_summ,
-    find_the_unknown_digit,
-    hamming_numbers,
-    knapsack_problem,
-    matrix_determinant,
-    most_frequently_used,
-    next_bigger_number,
-    poker_hand,
-    recover_a_secret_string_from_random_triplets
+    custom_paintfuck_interpreter_kata,
+    decode_the_morse_code_kata,
+    explosive_summ_kata,
+    find_the_unknown_digit_kata,
+    hamming_numbers_kata,
+    knapsack_problem_kata,
+    matrix_determinant_kata,
+    most_frequently_used_kata,
+    next_bigger_number_kata,
+    poker_hand_kata,
+    recover_a_secret_string_from_random_triplets_kata,
+    roman_numerals_kata,
+    strings_mix_kata,
+    twice_linear_kata,
+    where_are_you_kata
 )
 
 router = APIRouter(prefix='/kyu_4', tags=['4 kyu kata'])
@@ -48,7 +52,7 @@ async def custom_paintfuck_interpreter(
         description='Высота сетки данных'
     )
 ) -> str:
-    solution_res = custom_paintfuck_interpreter.interpreter(code=code,
+    solution_res = custom_paintfuck_interpreter_kata.interpreter(code=code,
                                                             iterations=iterations,
                                                             width=width,
                                                             height=height)
@@ -68,7 +72,7 @@ async def decode_morse(
         description='Строка из 0 и 1 обозначающих код Морзе, длиной менее 10000'
     )
 ) -> str:
-    solution_res = decode_the_morse_code.decode_morse(bits)
+    solution_res = decode_the_morse_code_kata.decode_morse(bits)
     return solution_res
 
 
@@ -83,7 +87,7 @@ async def exp_summ(
             description='Целое число от 1 до 200'
         )
 ) -> int:
-    solution_res = explosive_summ.exp_sum(n)
+    solution_res = explosive_summ_kata.exp_sum(n)
     return solution_res
 
 
@@ -109,7 +113,7 @@ async def solve_runes(
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                             detail='Числа в выражении должны быть меньше 1_000_000')
 
-    solution_res = find_the_unknown_digit.solve_runes(runes)
+    solution_res = find_the_unknown_digit_kata.solve_runes(runes)
     return solution_res
 
 
@@ -126,7 +130,7 @@ async def hamming(
             description='Целое число в диапазоне от 1 до 5000'
         )
 ) -> int:
-    solution_res = hamming_numbers.hamming(number)
+    solution_res = hamming_numbers_kata.hamming(number)
     return solution_res
 
 
@@ -150,7 +154,7 @@ async def knapsack(
             description='Число, представляющее максимальную вместимость рюкзака'
         )
 ) -> list[int, list[list[int]]]:
-    solution_res = knapsack_problem.knapsack(items, w_limit)
+    solution_res = knapsack_problem_kata.knapsack(items, w_limit)
     return solution_res
 
 
@@ -176,7 +180,7 @@ async def determinant(
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                             detail='Максимальная размерность - 8x8')
 
-    solution_res = matrix_determinant.determinant(matrix)
+    solution_res = matrix_determinant_kata.determinant(matrix)
     return solution_res
 
 
@@ -192,7 +196,7 @@ async def top_3_words(
             description='Текст'
         )
 ) -> list[str]:
-    solution_res = most_frequently_used.top_3_words(text)
+    solution_res = most_frequently_used_kata.top_3_words(text)
     return solution_res
 
 
@@ -211,7 +215,7 @@ async def next_bigger(
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                             detail='Длинна числа должна быть не более 20 цифр')
 
-    solution_res = next_bigger_number.next_bigger(n)
+    solution_res = next_bigger_number_kata.next_bigger(n)
     return solution_res
 
 
@@ -232,7 +236,7 @@ async def poker_hand(
             description='Строка, представляющая собой руку оппонента, например: KS AS TS QS JS'
         )
 ) -> Literal['Loss', 'Tie', 'Win']:
-    solution_res = poker_hand.run_kata(player_hand, opponent_hand)
+    solution_res = poker_hand_kata.run_kata(player_hand, opponent_hand)
     return solution_res
 
 
@@ -259,8 +263,101 @@ async def recover_secret(
         )
 ) -> str:
     try:
-        solution_res = recover_a_secret_string_from_random_triplets.recover_secret(triplets)
+        solution_res = recover_a_secret_string_from_random_triplets_kata.recover_secret(triplets)
     except TimeoutError:
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                             detail='Данные тройки символов не имеют решения')
+    return solution_res
+
+
+@router.post(
+    '/to_roman/{action}',
+    summary='roman numerals helper',
+    description='Ссылка на задачу https://www.codewars.com/kata/51b66044bce5799a7f000003'
+)
+async def roman_numerals(
+        action: Literal['to_roman', 'from_roman'],
+        number: str = Query(
+            ...,
+            description='При действии **to roman**, необходимо передать строку,'
+                        'представляющую число в диапазоне от 1 до 5000. '
+                        'При действии **from roman**, необходимо передать строку '
+                        'представляющую римское число, длинна строки от 1 до 30 символов'
+        )
+):
+    helper = roman_numerals_kata.RomanNumerals
+    match action:
+        case 'to_roman':
+            try:
+                number = int(number)
+            except ValueError:
+                raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                                    detail='Передаваемой строкой должно быть целое число')
+
+            if not (1 <= number <= 5000):
+                raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                                    detail='Число должно быть в диапазоне от 1 до 5000')
+            return helper.to_roman(number)
+
+        case 'from_roman':
+            if re.findall('[^MCDXLIV]', number):
+                raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                                    detail='Строка содержит недопустимые символы')
+
+            return helper.from_roman(number)
+
+
+@router.post(
+    '/string_mix',
+    summary='string mix',
+    description='Ссылка на задачу https://www.codewars.com/kata/5629db57620258aa9d000014'
+)
+async def string_mix(
+        s1: str = Query(
+            ...,
+            max_length=3000,
+            description='Текст'
+        ),
+        s2: str = Query(
+            ...,
+            max_length=3000,
+            description='Текст'
+        )
+) -> str:
+    solution_res = strings_mix_kata.mix(s1, s2)
+    return solution_res
+
+
+@router.post(
+    '/twice_linear',
+    summary='twice linear',
+    description='Ссылка на задачу https://www.codewars.com/kata/5672682212c8ecf83e000050'
+)
+async def twice_linear(
+        number: int = Query(
+            ...,
+            ge=1,
+            le=20000,
+            description='Число'
+        )
+) -> int:
+    solution_res = twice_linear_kata.dbl_linear(number)
+    return solution_res
+
+
+@router.post(
+    '/where_are_you',
+    summary='where_are_you',
+    description='Ссылка на задачу https://www.codewars.com/kata/5a0573c446d8435b8e00009f'
+)
+async def where_are_you(
+        path: str = Query(
+            ...,
+            regex='^[0-9lrLR]*$',
+            max_length=100,
+            description='Строка, обозначающие команды для исследователя'
+        )
+) -> list[int]:
+    explorer = where_are_you_kata.Explorer()
+    solution_res = explorer.i_am_here(path)
     return solution_res

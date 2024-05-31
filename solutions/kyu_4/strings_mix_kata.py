@@ -1,4 +1,6 @@
-# https://www.codewars.com/kata/5629db57620258aa9d000014
+"""Solution for kata https://www.codewars.com/kata/5629db57620258aa9d000014."""
+
+
 def mix(s1, s2):
     d1 = {}
     d2 = {}
