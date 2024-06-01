@@ -72,7 +72,8 @@ async def decode_morse(
         description='Строка из 0 и 1 обозначающих код Морзе, длиной менее 10000'
     )
 ) -> str:
-    solution_res = decode_the_morse_code_kata.decode_morse(bits)
+    morse = decode_the_morse_code_kata.decode_bits(bits)
+    solution_res = decode_the_morse_code_kata.decode_morse(morse)
     return solution_res
 
 

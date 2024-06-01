@@ -84,7 +84,6 @@ def decode_morse(morse_code):
     words = morse_code.split('   ')
     words = [word.split(' ') for word in words]
     out_words = []
-    print(words)
     for word in words:
         buffer = []
         for letter in word:
