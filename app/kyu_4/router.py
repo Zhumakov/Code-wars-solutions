@@ -1,7 +1,7 @@
 import re
-from typing import Literal
+from typing import Literal, Union
 
-from fastapi import APIRouter, HTTPException, Query, status
+from fastapi import APIRouter, HTTPException, Body, status
 
 from solutions.kyu_4 import (
     custom_paintfuck_interpreter_kata,
@@ -30,32 +30,32 @@ router = APIRouter(prefix='/kyu_4', tags=['4 kyu kata'])
     description='Ссылка на задачу https://www.codewars.com/kata/5868a68ba44cfc763e00008d'
 )
 async def custom_paintfuck_interpreter(
-    code: str = Query(
+    code: str = Body(
         ...,
         min_length=1,
         max_length=2000,
         description='Код Paintfuck, который необходимо выполнить'
     ),
-    iterations: int = Query(
+    iterations: int = Body(
         ...,
         ge=0,
         description='Количество итераций, которое необходимо выполнить'
     ),
-    width: int = Query(
+    width: int = Body(
         ...,
         ge=1,
         description='Ширина сетки данных'
     ),
-    height: int = Query(
+    height: int = Body(
         ...,
         ge=1,
         description='Высота сетки данных'
     )
 ) -> str:
     solution_res = custom_paintfuck_interpreter_kata.interpreter(code=code,
-                                                            iterations=iterations,
-                                                            width=width,
-                                                            height=height)
+                                                                 iterations=iterations,
+                                                                 width=width,
+                                                                 height=height)
     return solution_res
 
 
@@ -65,10 +65,10 @@ async def custom_paintfuck_interpreter(
     description='Ссылка на задачу https://www.codewars.com/kata/54b72c16cd7f5154e9000457'
 )
 async def decode_morse(
-    bits: str = Query(
+    bits: str = Body(
         ...,
         max_length=10000,
-        regex='^[01]*$',
+        pattern='^[01]*$',
         description='Строка из 0 и 1 обозначающих код Морзе, длиной менее 10000'
     )
 ) -> str:
@@ -80,7 +80,7 @@ async def decode_morse(
              summary='explosive sum',
              description='Ссылка на задачу https://www.codewars.com/kata/52ec24228a515e620b0005ef')
 async def exp_summ(
-        n: int = Query(
+        n: int = Body(
             ...,
             ge=1,
             le=200,
@@ -97,7 +97,7 @@ async def exp_summ(
     description='Ссылка на задачу https://www.codewars.com/kata/546d15cebed2e10334000ed9'
 )
 async def solve_runes(
-        runes: str = Query(
+        runes: str = Body(
             ...,
             description='Строка вида [number][op][number]=[number], '
                         'например: 123*45?=5?088'
@@ -123,7 +123,7 @@ async def solve_runes(
     description='Ссылка на задачу https://www.codewars.com/kata/526d84b98f428f14a60008da'
 )
 async def hamming(
-        number: int = Query(
+        number: int = Body(
             ...,
             gt=0,
             lt=5000,
@@ -140,20 +140,20 @@ async def hamming(
     description='Ссылка на задачу https://www.codewars.com/kata/5c2256acb26767ff56000047'
 )
 async def knapsack(
-        items: list[list[int]] = Query(
+        items: list[list[int]] = Body(
             ...,
             min_length=1,
             max_length=200,
             description='Список предметов, представленный в формате [вес, стоимость],'
                         'количество предметов должно быть в диапазоне от 1 до 200'
         ),
-        w_limit: int = Query(
+        w_limit: int = Body(
             ...,
             ge=1,
             le=80,
             description='Число, представляющее максимальную вместимость рюкзака'
         )
-) -> list[int, list[list[int]]]:
+) -> list[Union[int, list]]:
     solution_res = knapsack_problem_kata.knapsack(items, w_limit)
     return solution_res
 
@@ -164,7 +164,7 @@ async def knapsack(
     description='Ссылка на задачу https://www.codewars.com/kata/52a382ee44408cea2500074c'
 )
 async def determinant(
-    matrix: list[list[int]] = Query(
+    matrix: list[list[int]] = Body(
         ...,
         description='Матрица NxN, состоящая из целых чисел, максимальная размерность - 8x8'
     )
@@ -190,7 +190,7 @@ async def determinant(
     description='Ссылка на задачу https://www.codewars.com/kata/51e056fe544cf36c410000fb'
 )
 async def top_3_words(
-        text: str = Query(
+        text: str = Body(
             ...,
             max_length=1000,
             description='Текст'
@@ -206,7 +206,7 @@ async def top_3_words(
     description='Ссылка на задачу https://www.codewars.com/kata/55983863da40caa2c900004e'
 )
 async def next_bigger(
-        n: int = Query(
+        n: int = Body(
             ...,
             description='Положительное целое число длинной до 20 цифр'
         )
@@ -225,14 +225,14 @@ async def next_bigger(
     description='Ссылка на задачу https://www.codewars.com/kata/5739174624fc28e188000465'
 )
 async def poker_hand(
-        player_hand: str = Query(
+        player_hand: str = Body(
             ...,
-            regex='^([0-9TJQKA][SHDC] ?){5}$',
+            pattern='^([0-9TJQKA][SHDC] ?){5}$',
             description='Строка, представляющая собой руку игрока, например: 2H 3H 4H 5H 6H'
         ),
-        opponent_hand: str = Query(
+        opponent_hand: str = Body(
             ...,
-            regex='^([0-9TJQKA][SHDC] ?){5}$',
+            pattern='^([0-9TJQKA][SHDC] ?){5}$',
             description='Строка, представляющая собой руку оппонента, например: KS AS TS QS JS'
         )
 ) -> Literal['Loss', 'Tie', 'Win']:
@@ -246,7 +246,7 @@ async def poker_hand(
     description='Ссылка на задачу https://www.codewars.com/kata/53f40dff5f9d31b813000774'
 )
 async def recover_secret(
-        triplets: list[list[str]] = Query(
+        triplets: list[list[str]] = Body(
             default=[
                 ['t', 'u', 'p'],
                 ['w', 'h', 'i'],
@@ -277,7 +277,7 @@ async def recover_secret(
 )
 async def roman_numerals(
         action: Literal['to_roman', 'from_roman'],
-        number: str = Query(
+        number: str = Body(
             ...,
             description='При действии **to roman**, необходимо передать строку,'
                         'представляющую число в диапазоне от 1 до 5000. '
@@ -313,12 +313,12 @@ async def roman_numerals(
     description='Ссылка на задачу https://www.codewars.com/kata/5629db57620258aa9d000014'
 )
 async def string_mix(
-        s1: str = Query(
+        s1: str = Body(
             ...,
             max_length=3000,
             description='Текст'
         ),
-        s2: str = Query(
+        s2: str = Body(
             ...,
             max_length=3000,
             description='Текст'
@@ -334,7 +334,7 @@ async def string_mix(
     description='Ссылка на задачу https://www.codewars.com/kata/5672682212c8ecf83e000050'
 )
 async def twice_linear(
-        number: int = Query(
+        number: int = Body(
             ...,
             ge=1,
             le=20000,
@@ -351,9 +351,9 @@ async def twice_linear(
     description='Ссылка на задачу https://www.codewars.com/kata/5a0573c446d8435b8e00009f'
 )
 async def where_are_you(
-        path: str = Query(
+        path: str = Body(
             ...,
-            regex='^[0-9lrLR]*$',
+            pattern='^[0-9lrLR]*$',
             max_length=100,
             description='Строка, обозначающие команды для исследователя'
         )
