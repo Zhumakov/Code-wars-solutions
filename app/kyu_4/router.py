@@ -207,16 +207,16 @@ async def top_3_words(
     description='Ссылка на задачу https://www.codewars.com/kata/55983863da40caa2c900004e'
 )
 async def next_bigger(
-        n: int = Body(
+        number: int = Body(
             ...,
             description='Положительное целое число длинной до 20 цифр'
         )
 ) -> int:
-    if len(str(n)) >= 20:
+    if len(str(number)) >= 20:
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                             detail='Длинна числа должна быть не более 20 цифр')
 
-    solution_res = next_bigger_number_kata.next_bigger(n)
+    solution_res = next_bigger_number_kata.next_bigger(number)
     return solution_res
 
 
@@ -272,7 +272,7 @@ async def recover_secret(
 
 
 @router.post(
-    '/to_roman/{action}',
+    '/roman_numerals/{action}',
     summary='roman numerals helper',
     description='Ссылка на задачу https://www.codewars.com/kata/51b66044bce5799a7f000003'
 )
@@ -304,6 +304,9 @@ async def roman_numerals(
             if re.findall('[^MCDXLIV]', number):
                 raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                                     detail='Строка содержит недопустимые символы')
+            if not 1 <= len(number) <= 30:
+                raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                                    detail='Длина строки должна быть от 1 до 30 символов')
 
             return helper.from_roman(number)
 

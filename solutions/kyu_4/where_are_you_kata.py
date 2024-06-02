@@ -61,4 +61,4 @@ class Explorer:
                         case 'East': self.coordinates[1] += i
                     direction = directions.index(direction)
         self.direction = direction
-        return self.direction
+        return self.coordinates
