@@ -1,3 +1,5 @@
+"""Этот модуль создаёт роутер и добавляет к нему эндпоинты для задач уровня 4kyu."""
+
 import re
 from typing import Literal, Union
 
@@ -20,6 +22,8 @@ from solutions.kyu_4 import (
     twice_linear_kata,
     where_are_you_kata
 )
+from app.logger import error_logger
+
 
 router = APIRouter(prefix='/kyu_4', tags=['4 kyu kata'])
 
@@ -52,11 +56,27 @@ async def custom_paintfuck_interpreter(
         description='Высота сетки данных'
     )
 ) -> str:
-    solution_res = custom_paintfuck_interpreter_kata.interpreter(code=code,
-                                                                 iterations=iterations,
-                                                                 width=width,
-                                                                 height=height)
-    return solution_res
+    try:
+        solution_res = custom_paintfuck_interpreter_kata.interpreter(
+            code=code,
+            iterations=iterations,
+            width=width,
+            height=height
+        )
+        return solution_res
+
+    except Exception:
+        error_logger.error(
+            msg='Unknown Exception',
+            extra={
+                'code': code,
+                'iterations': iterations,
+                'width': width,
+                'height': height
+            },
+            exc_info=True
+        )
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @router.post(
@@ -72,24 +92,46 @@ async def decode_morse(
         description='Строка из 0 и 1 обозначающих код Морзе, длиной менее 10000'
     )
 ) -> str:
-    morse = decode_the_morse_code_kata.decode_bits(bits)
-    solution_res = decode_the_morse_code_kata.decode_morse(morse)
-    return solution_res
+    try:
+        morse = decode_the_morse_code_kata.decode_bits(bits)
+        solution_res = decode_the_morse_code_kata.decode_morse(morse)
+        return solution_res
+
+    except Exception:
+        error_logger.error(
+            msg='Unknown Exception',
+            extra={
+                'bits': bits
+            },
+            exc_info=True
+        )
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @router.post('/exp_summ',
              summary='explosive sum',
              description='Ссылка на задачу https://www.codewars.com/kata/52ec24228a515e620b0005ef')
 async def exp_summ(
-        n: int = Body(
+        number: int = Body(
             ...,
             ge=1,
             le=200,
             description='Целое число от 1 до 200'
         )
 ) -> int:
-    solution_res = explosive_summ_kata.exp_sum(n)
-    return solution_res
+    try:
+        solution_res = explosive_summ_kata.exp_sum(number)
+        return solution_res
+
+    except Exception:
+        error_logger.error(
+            msg='Unknown Exception',
+            extra={
+                'number': number
+            },
+            exc_info=True
+        )
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @router.post(
@@ -113,9 +155,19 @@ async def solve_runes(
     if not all(map(lambda x: len(x) < 7, numbers)):
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                             detail='Числа в выражении должны быть меньше 1_000_000')
+    try:
+        solution_res = find_the_unknown_digit_kata.solve_runes(runes)
+        return solution_res
 
-    solution_res = find_the_unknown_digit_kata.solve_runes(runes)
-    return solution_res
+    except Exception:
+        error_logger.error(
+            msg='Unknown Exception',
+            extra={
+                'runes': runes
+            },
+            exc_info=True
+        )
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @router.post(
@@ -131,8 +183,19 @@ async def hamming(
             description='Целое число в диапазоне от 1 до 5000'
         )
 ) -> int:
-    solution_res = hamming_numbers_kata.hamming(number)
-    return solution_res
+    try:
+        solution_res = hamming_numbers_kata.hamming(number)
+        return solution_res
+
+    except Exception:
+        error_logger.error(
+            msg='Unknown Exception',
+            extra={
+                'number': number
+            },
+            exc_info=True
+        )
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @router.post(
@@ -155,8 +218,20 @@ async def knapsack(
             description='Число, представляющее максимальную вместимость рюкзака'
         )
 ) -> list[Union[int, list]]:
-    solution_res = knapsack_problem_kata.knapsack(items, w_limit)
-    return solution_res
+    try:
+        solution_res = knapsack_problem_kata.knapsack(items, w_limit)
+        return solution_res
+
+    except Exception:
+        error_logger.error(
+            msg='Unknown Exception',
+            extra={
+                'items': items,
+                'w_limit': w_limit
+            },
+            exc_info=True
+        )
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @router.post(
@@ -181,8 +256,19 @@ async def determinant(
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                             detail='Максимальная размерность - 8x8')
 
-    solution_res = matrix_determinant_kata.determinant(matrix)
-    return solution_res
+    try:
+        solution_res = matrix_determinant_kata.determinant(matrix)
+        return solution_res
+
+    except Exception:
+        error_logger.error(
+            msg='Unknown Exception',
+            extra={
+                'items': matrix
+            },
+            exc_info=True
+        )
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @router.post(
@@ -197,8 +283,19 @@ async def top_3_words(
             description='Текст'
         )
 ) -> list[str]:
-    solution_res = most_frequently_used_kata.top_3_words(text)
-    return solution_res
+    try:
+        solution_res = most_frequently_used_kata.top_3_words(text)
+        return solution_res
+
+    except Exception:
+        error_logger.error(
+            msg='Unknown Exception',
+            extra={
+                'text': text
+            },
+            exc_info=True
+        )
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @router.post(
@@ -216,8 +313,19 @@ async def next_bigger(
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                             detail='Длинна числа должна быть не более 20 цифр')
 
-    solution_res = next_bigger_number_kata.next_bigger(number)
-    return solution_res
+    try:
+        solution_res = next_bigger_number_kata.next_bigger(number)
+        return solution_res
+
+    except Exception:
+        error_logger.error(
+            msg='Unknown Exception',
+            extra={
+                'number': number
+            },
+            exc_info=True
+        )
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @router.post(
@@ -237,8 +345,20 @@ async def poker_hand(
             description='Строка, представляющая собой руку оппонента, например: KS AS TS QS JS'
         )
 ) -> Literal['Loss', 'Tie', 'Win']:
-    solution_res = poker_hand_kata.run_kata(player_hand, opponent_hand)
-    return solution_res
+    try:
+        solution_res = poker_hand_kata.run_kata(player_hand, opponent_hand)
+        return solution_res
+
+    except Exception:
+        error_logger.error(
+            msg='Unknown Exception',
+            extra={
+                'player_hand': player_hand,
+                'opponent_hand': opponent_hand
+            },
+            exc_info=True
+        )
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @router.post(
@@ -265,10 +385,21 @@ async def recover_secret(
 ) -> str:
     try:
         solution_res = recover_a_secret_string_from_random_triplets_kata.recover_secret(triplets)
+        return solution_res
+
     except TimeoutError:
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                             detail='Данные тройки символов не имеют решения')
-    return solution_res
+
+    except Exception:
+        error_logger.error(
+            msg='Unknown Exception',
+            extra={
+                'triplets': triplets
+            },
+            exc_info=True
+        )
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @router.post(
@@ -298,7 +429,19 @@ async def roman_numerals(
             if not (1 <= number <= 5000):
                 raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                                     detail='Число должно быть в диапазоне от 1 до 5000')
-            return helper.to_roman(number)
+            try:
+                return helper.to_roman(number)
+
+            except Exception:
+                error_logger.error(
+                    msg='Unknown Exception',
+                    extra={
+                        'action': action,
+                        'number': number
+                    },
+                    exc_info=True
+                )
+                raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         case 'from_roman':
             if re.findall('[^MCDXLIV]', number):
@@ -308,7 +451,19 @@ async def roman_numerals(
                 raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                                     detail='Длина строки должна быть от 1 до 30 символов')
 
-            return helper.from_roman(number)
+            try:
+                return helper.from_roman(number)
+
+            except Exception:
+                error_logger.error(
+                    msg='Unknown Exception',
+                    extra={
+                        'action': action,
+                        'number': number
+                    },
+                    exc_info=True
+                )
+                raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @router.post(
@@ -328,8 +483,20 @@ async def string_mix(
             description='Текст'
         )
 ) -> str:
-    solution_res = strings_mix_kata.mix(s1, s2)
-    return solution_res
+    try:
+        solution_res = strings_mix_kata.mix(s1, s2)
+        return solution_res
+
+    except Exception:
+        error_logger.error(
+            msg='Unknown Exception',
+            extra={
+                's1': s1,
+                's2': s2
+            },
+            exc_info=True
+        )
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @router.post(
@@ -345,8 +512,19 @@ async def twice_linear(
             description='Число'
         )
 ) -> int:
-    solution_res = twice_linear_kata.dbl_linear(number)
-    return solution_res
+    try:
+        solution_res = twice_linear_kata.dbl_linear(number)
+        return solution_res
+
+    except Exception:
+        error_logger.error(
+            msg='Unknown Exception',
+            extra={
+                'number': number
+            },
+            exc_info=True
+        )
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @router.post(
@@ -362,6 +540,17 @@ async def where_are_you(
             description='Строка, обозначающие команды для исследователя'
         )
 ) -> list[int]:
-    explorer = where_are_you_kata.Explorer()
-    solution_res = explorer.i_am_here(path)
-    return solution_res
+    try:
+        explorer = where_are_you_kata.Explorer()
+        solution_res = explorer.i_am_here(path)
+        return solution_res
+
+    except Exception:
+        error_logger.error(
+            msg='Unknown Exception',
+            extra={
+                'path': path
+            },
+            exc_info=True
+        )
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
