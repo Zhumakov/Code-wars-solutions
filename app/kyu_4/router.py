@@ -336,7 +336,7 @@ async def next_bigger(
 async def poker_hand(
         player_hand: str = Body(
             ...,
-            pattern='^([0-9TJQKA][SHDC] ?){5}$',
+            pattern='^([0-9TJQKA][SHDC] ){5}$',
             description='Строка, представляющая собой руку игрока, например: 2H 3H 4H 5H 6H'
         ),
         opponent_hand: str = Body(

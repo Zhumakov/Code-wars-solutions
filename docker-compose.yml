@@ -1,0 +1,26 @@
+version: '3.7'
+services:
+  nginx:
+    image: nginx:alpine
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+    volumes:
+      - ./conf.d:/etc/nginx/conf.d
+    networks:
+      - app_network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: "solutions_app"
+    env_file:
+      - .env
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge

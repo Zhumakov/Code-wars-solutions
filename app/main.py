@@ -4,6 +4,7 @@ from fastapi import FastAPI, Request, Response
 from prometheus_fastapi_instrumentator import Instrumentator
 import uvicorn
 
+from app.main_page.router import router as main_page_router
 from app.kyu_4.router import router as kyu_4_router
 from app.logger import endpoint_logger
 
@@ -13,6 +14,7 @@ app = FastAPI(
 )
 
 # Добавляются в app роутеры с эндпоинтами
+app.include_router(router=main_page_router)
 app.include_router(router=kyu_4_router)
 
 # Добавляется интсрументатор для сбора метрик
