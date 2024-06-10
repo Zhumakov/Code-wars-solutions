@@ -38,7 +38,7 @@ async def add_process_time_header(request: Request, call_next):
     process_time = time.perf_counter() - start_time
     response.headers['X-Process-Time'] = str(process_time)
 
-    if request.url != 'http://booking:8000/metrics':
+    if request.url != 'http://solutions_app:8000/metrics':
         endpoint_logger.info(
             f'Request time: {request.url} | {request.method}',
             extra={

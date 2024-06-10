@@ -2,12 +2,14 @@ version: '3.7'
 services:
   nginx:
     image: nginx:alpine
+    restart: unless-stopped
     depends_on:
       - app
     ports:
-      - "80:80"
+      - '80:80'
     volumes:
       - ./conf.d:/etc/nginx/conf.d
+      - ./.htpasswd:/etc/nginx/.htpasswd
     networks:
       - app_network
 
@@ -15,11 +17,65 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: "solutions_app"
+    container_name: 'solutions_app'
     env_file:
       - .env
+    logging:
+      driver: loki
+      options:
+        loki-url: 'http://localhost:3100/loki/api/v1/push'
+        loki-batch-size: "100"
+        loki-retries: 2
+        loki-max-backoff: 1000ms
+        loki-timeout: 1s
     networks:
       - app_network
+    labels:
+      - 'prometheus_job=app'
+
+  loki:
+    image: grafana/loki:latest
+    container_name: 'loki'
+    restart: on-failure
+    volumes:
+      - ./loki-config.yml:/etc/loki/config.yaml
+    command: -config.file=/etc/loki/config.yaml
+    ports:
+      - '3100:3100'
+    networks:
+      - app_network
+
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: 'prometheus'
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheusdata:/prometheus
+    restart: unless-stopped
+    ports:
+      - '9090:9090'
+    networks:
+      - app_network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: 'grafana'
+    volumes:
+      - grafanadata:/var/lib/grafana
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+    restart: unless-stopped
+    depends_on:
+      - loki
+    ports:
+      - '3000:3000'
+    networks:
+      - app_network
+
+
+volumes:
+  prometheusdata:
+  grafanadata:
 
 networks:
   app_network:
