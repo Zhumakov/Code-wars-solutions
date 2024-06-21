@@ -1,10 +1,12 @@
 """Этот модуль создаёт эндпоинт для задачи."""
-from fastapi import status, HTTPException
+from fastapi import status, HTTPException, APIRouter
 
-from app.kyu_4.router import router
 from app.kyu_4.where_are_you_kata.schemas import ShRequestData, ShResponseData
 from app.logger import error_logger
 from solutions.kyu_4 import where_are_you_kata
+
+
+router = APIRouter(prefix='')
 
 
 @router.post(

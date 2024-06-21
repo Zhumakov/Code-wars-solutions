@@ -58,7 +58,7 @@ stream_handler.setFormatter(_formatter)
 file_handler = RotatingFileHandler(
     filename='./app/logs/error_logs.log',
     maxBytes=512 * 1024 * 1024,     # Максимальный размер файла в байтах (512 МБ)
-    backupCount=0
+    backupCount=1
 )
 file_handler.setFormatter(_formatter)
 
