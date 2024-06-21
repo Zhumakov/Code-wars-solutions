@@ -43,7 +43,7 @@ async def test_custom_paintfuck_interpreter(
 async def test_decode_morse(bits, status_code, async_client: AsyncClient):
     response = await async_client.post(
         '/kyu_4/decode_morse',
-        json=bits
+        json={'bits': bits}
     )
     assert response.status_code == status_code
 
@@ -61,7 +61,7 @@ async def test_decode_morse(bits, status_code, async_client: AsyncClient):
 async def test_exp_summ(number, status_code, async_client: AsyncClient):
     response = await async_client.post(
         '/kyu_4/exp_summ',
-        json=number
+        json={'number': number}
     )
     assert response.status_code == status_code
 
@@ -79,7 +79,7 @@ async def test_exp_summ(number, status_code, async_client: AsyncClient):
 async def test_solve_runes(runes, status_code, async_client: AsyncClient):
     response = await async_client.post(
         '/kyu_4/solve_runes',
-        json=runes
+        json={'runes': runes}
     )
     assert response.status_code == status_code
 
@@ -98,7 +98,7 @@ async def test_solve_runes(runes, status_code, async_client: AsyncClient):
 async def test_hamming(number, status_code, async_client: AsyncClient):
     response = await async_client.post(
         '/kyu_4/hamming',
-        json=number
+        json={'number': number}
     )
     assert response.status_code == status_code
 
@@ -160,7 +160,7 @@ async def test_knapsack(items, w_limit, status_code, async_client: AsyncClient):
 async def test_determinant(matrix, status_code, async_client: AsyncClient):
     response = await async_client.post(
         '/kyu_4/determinant',
-        json=matrix
+        json={'matrix': matrix}
     )
     assert response.status_code == status_code
 
@@ -176,7 +176,7 @@ async def test_determinant(matrix, status_code, async_client: AsyncClient):
 async def test_top_3_words(text, status_code, async_client: AsyncClient):
     response = await async_client.post(
         '/kyu_4/top_3_words',
-        json=text
+        json={'text': text}
     )
     assert response.status_code == status_code
 
@@ -192,7 +192,7 @@ async def test_top_3_words(text, status_code, async_client: AsyncClient):
 async def test_next_bigger(number, status_code, async_client: AsyncClient):
     response = await async_client.post(
         '/kyu_4/next_bigger',
-        json=number
+        json={'number': number}
     )
     assert response.status_code == status_code
 
@@ -251,7 +251,7 @@ async def test_poker_hand(player_hand, opponent_hand, status_code, async_client:
 async def test_recover_secret(triplets, status_code, async_client: AsyncClient):
     response = await async_client.post(
         '/kyu_4/recover_secret',
-        json=triplets
+        json={'triplets': triplets}
     )
     assert response.status_code == status_code
 
@@ -275,7 +275,7 @@ async def test_recover_secret(triplets, status_code, async_client: AsyncClient):
 async def test_roman_numerals(action, number, status_code, async_client: AsyncClient):
     response = await async_client.post(
         f'/kyu_4/roman_numerals/{action}',
-        json=number
+        json={'number': number}
     )
     assert response.status_code == status_code
 
@@ -313,7 +313,7 @@ async def test_string_mix(s1, s2, status_code, async_client: AsyncClient):
 async def test_twice_linear(number, status_code, async_client: AsyncClient):
     response = await async_client.post(
         f'/kyu_4/twice_linear',
-        json=number
+        json={'number': number}
     )
     assert response.status_code == status_code
 
@@ -330,6 +330,6 @@ async def test_twice_linear(number, status_code, async_client: AsyncClient):
 async def test_where_are_you(path, status_code, async_client: AsyncClient):
     response = await async_client.post(
         f'/kyu_4/where_are_you',
-        json=path
+        json={'path': path}
     )
     assert response.status_code == status_code
