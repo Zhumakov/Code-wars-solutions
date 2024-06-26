@@ -2,8 +2,8 @@
 
 Чтобы использовать API, необходимо отправлять запросы **POST** на соответствующий URL-адрес.
 Пример обращения к API с помощью библиотеки **request**:
-```angular2html
-import requests
+```python
+import request
 
 url = "http://127.0.0.1:8000/kyu_4/poker_hand"
 data = {
@@ -11,7 +11,7 @@ data = {
     'opponent_hand': 'KS AS TS QS JS'
 }
 
-response = requests.post(url, json=data)
+response = request.post(url, json=data)
 print(response.json())
 
 >>>Lose
@@ -19,4 +19,6 @@ print(response.json())
 
 В [документации](http://localhost/docs) **Swagger UI** описаны все эндпоинты и принимаемые значения,
 также описана валидация входных значений, например для примера выше описана валидация входных значений
-на основе регулярного выражения
+на основе регулярного выражения.
+
+Не все решения из папки *solutions* имеют соответсвующий эндпоинт.
